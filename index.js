@@ -47,8 +47,8 @@ clientDis.on('ready', () => {
 })
 
 const sendFavs = () => {
-    if (urls.length > 1000) {
-        urls.length = 0
+    if (urls.length > 80) {
+        urls.shift()
     }
     clientTwi.get('favorites/list', function (error, tweets, response) {
         if (error) throw error;
