@@ -1,5 +1,6 @@
 const Twitter = require('twitter')
-const {Client, Intents } = require('discord.js')
+const { Client, Intents } = require('discord.js')
+const { bashCompletionSpecFromOptions } = require('dashdash')
 const clientDis = new Client({ intents: Object.keys(Intents.FLAGS) })
 
 const clientTwi = new Twitter({
@@ -9,18 +10,42 @@ const clientTwi = new Twitter({
     access_token_secret: ''
 })
 
+const tokenDis = ''
+
 clientDis.on('ready', () => {
     console.log(`${clientDis.user.tag}でログインしています。`)
+    sendFavs()
 })
 
-clientTwi.get('favorites/list', function(error, tweets, response) {
-    if(error) throw error;
-    for(const i in tweets) {
-        //console.log(clientDis.channels.cache.get('819281572669816832'))
-        console.log(tweets[i].entities.media[0].media_url.toString())
-    }
-})
+const sendFavs = () => {
+    clientTwi.get('favorites/list', function (error, tweets, response) {
+        if (error) throw error;
+        for (const i in tweets) {
+            try {
+                for (const j in tweets[i].extended_entities.media) {
+                    clientDis.channels.cache.get('チャンネルID').send(tweets[i].extended_entities.media[j].media_url.toString())
+                    console.log(tweets[i].extended_entities.media[j].media_url)
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
+    })
+    setTimeout(() => {
+        sendFavs()
+    }, 7200000);
+}
 
-console.log(clientDis.channels.cache)
+// clientTwi.get('favorites/list', function(error, tweets, response) {
+//     if (error) throw error;
+//     for (const i in tweets) {
+//         try {
+//             console.log(tweets[i].extended_entities.media)
+//         } catch (e) {
+//             console.error(e)
+//         }
+//     }
+//     //console.log(tweets[1].extended_entities.media[1])
+// })
 
-clientDis.login('')
+clientDis.login(tokenDis)
