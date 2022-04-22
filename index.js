@@ -1,6 +1,5 @@
 const Twitter = require('twitter')
 const { Client, Intents } = require('discord.js')
-const { bashCompletionSpecFromOptions } = require('dashdash')
 const clientDis = new Client({ intents: Object.keys(Intents.FLAGS) })
 
 const clientTwi = new Twitter({
@@ -12,7 +11,35 @@ const clientTwi = new Twitter({
 
 const tokenDis = ''
 
-const urls = []
+let urls = []
+
+let waitTimer = 0
+
+const connect = () => {
+    setTimeout(() => {
+        clientDis.login(tokenDis)
+            .then(() => {
+                waitTimer = 0
+        })
+        .catch((error) => {
+            waitTimer += 6000
+            connect()
+        })
+    }, waitTimer)
+}
+
+clientDis.on('disconnect', (e) => {
+    connect()
+    console.error(e)
+})
+
+clientDis.on("error", (e) => {
+    console.error(e);
+})
+  
+clientDis.on("warn", (e) => {
+    console.info(e);
+})
 
 clientDis.on('ready', () => {
     console.log(`${clientDis.user.tag}でログインしています。`)
@@ -43,7 +70,7 @@ const sendFavs = () => {
     })
     setTimeout(() => {
         sendFavs()
-    }, 7200000);
+    }, 10000);
 }
 
 // clientTwi.get('favorites/list', function(error, tweets, response) {
