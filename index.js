@@ -12,6 +12,7 @@ const clientTwi = new Twitter({
 const tokenDis = ''
 
 let urls = []
+let ids = []
 
 let waitTimer = 0
 
@@ -50,21 +51,30 @@ const sendFavs = () => {
     if (urls.length > 80) {
         urls.shift()
     }
+    if (ids.length > 80) {
+        ids.shift()
+    }
     clientTwi.get('favorites/list', function (error, tweets, response) {
         if (error) throw error;
         for (const i in tweets) {
+            if (ids.includes(tweets[i].id.toString())) {
+                console.log("skipped")
+                continue
+            }
             try {
                 for (const j in tweets[i].extended_entities.media) {
                     if (urls.includes(tweets[i].extended_entities.media[j].media_url.toString())) {
                         continue
                     } else {
                         urls.push(tweets[i].extended_entities.media[j].media_url.toString())
-                        clientDis.channels.cache.get('チャンネルID').send(tweets[i].extended_entities.media[j].media_url.toString())
+                        clientDis.channels.cache.get('819281572669816832').send(tweets[i].extended_entities.media[j].media_url.toString())
                         console.log(tweets[i].extended_entities.media[j].media_url)
                     }
                 }
             } catch (e) {
                 console.error(e)
+                ids.push(tweets[i].id.toString())
+                console.log(ids)
             }
         }
     })
@@ -76,6 +86,7 @@ const sendFavs = () => {
 // clientTwi.get('favorites/list', function(error, tweets, response) {
 //     if (error) throw error;
 //     for (const i in tweets) {
+//         console.log(tweets[i])
 //         try {
 //             console.log(tweets[i].extended_entities.media)
 //         } catch (e) {
