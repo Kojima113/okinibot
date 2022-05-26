@@ -1,0 +1,14 @@
+name: OkiniBot Action
+
+on:
+  push:
+    branches: 
+      - master
+  workflow_dispatch:
+
+jobs:
+  getFavs-sendFavs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: execute okinibot
+        run: node ./index.js

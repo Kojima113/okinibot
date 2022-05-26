@@ -16,19 +16,6 @@ let ids = []
 
 let waitTimer = 0
 
-const connect = () => {
-    setTimeout(() => {
-        clientDis.login(tokenDis)
-            .then(() => {
-                waitTimer = 0
-        })
-        .catch((error) => {
-            waitTimer += 6000
-            connect()
-        })
-    }, waitTimer)
-}
-
 clientDis.on('disconnect', (e) => {
     connect()
     console.error(e)
@@ -47,6 +34,19 @@ clientDis.on('ready', () => {
     sendFavs()
 })
 
+const connect = () => {
+    setTimeout(() => {
+        clientDis.login(tokenDis)
+            .then(() => {
+                waitTimer = 0
+        })
+        .catch((error) => {
+            waitTimer += 6000
+            connect()
+        })
+    }, waitTimer)
+}
+
 const sendFavs = () => {
     if (urls.length > 80) {
         urls.shift()
@@ -55,7 +55,14 @@ const sendFavs = () => {
         ids.shift()
     }
     clientTwi.get('favorites/list', function (error, tweets, response) {
-        if (error) throw error;
+        try {
+            if (error) throw error;
+        }catch (error) {
+            console.error(error)
+            setTimeout(() => {
+                sendFavs()
+            }, 10000)
+        }
         for (const i in tweets) {
             if (ids.includes(tweets[i].id.toString())) {
                 console.log("skipped")
