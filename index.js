@@ -10,7 +10,7 @@ const clientTwi = new Twitter({
     access_token_secret: env.TWITTER_ACCESS_TOKEN_SECRET
 })
 
-const tokenDis = DISCORD_TOKEN
+const tokenDis = env.DISCORD_TOKEN
 
 let urls = []
 let ids = []
