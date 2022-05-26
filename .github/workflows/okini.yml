@@ -16,6 +16,6 @@ jobs:
       with:
         node-version: '12.x'
     - name: Install dependencies
-        run: npm ci
+      run: npm ci
     - name: execute okinibot
-        run: node ./index.js
+      run: node ./index.js
