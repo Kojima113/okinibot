@@ -1,14 +1,15 @@
 name: OkiniBot Action
 
 on:
-  push:
-    branches: 
-      - master
   workflow_dispatch:
 
 jobs:
   getFavs-sendFavs:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        cache: npm
       - name: execute okinibot
         run: node ./index.js
