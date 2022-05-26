@@ -3,13 +3,13 @@ const { Client, Intents } = require('discord.js')
 const clientDis = new Client({ intents: Object.keys(Intents.FLAGS) })
 
 const clientTwi = new Twitter({
-    consumer_key: '',
-    consumer_secret: '',
-    access_token_key: '',
-    access_token_secret: ''
+    consumer_key: TWITTER_KEY,
+    consumer_secret: TWITTER_SECRET_KEY,
+    access_token_key: TWITTER_ACCESS_TOKEN,
+    access_token_secret: TWITTER_ACCESS_TOKEN_SECRET
 })
 
-const tokenDis = ''
+const tokenDis = DISCORD_TOKEN
 
 let urls = []
 let ids = []
