@@ -62,7 +62,7 @@ const sendFavs = () => {
             console.error(error)
             setTimeout(() => {
                 sendFavs()
-            }, 10000)
+            }, 30000)
         }
         for (const i in tweets) {
             if (ids.includes(tweets[i].id.toString())) {
@@ -88,7 +88,7 @@ const sendFavs = () => {
     })
     setTimeout(() => {
         sendFavs()
-    }, 10000);
+    }, 30000);
 }
 
 // clientTwi.get('favorites/list', function(error, tweets, response) {
